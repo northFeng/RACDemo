@@ -22,6 +22,9 @@
 ///
 @property (nonatomic,copy) NSString *name;
 
+///输入框
+@property (nonatomic,strong) UITextField *textField;
+
 @end
 
 @implementation RACSignalVC
@@ -153,7 +156,7 @@
     }];
      */
     
-    //在VC死亡之前 使用 [_subject sendCompleted]; ——>使订阅block释放！！
+    //不使用weakSelf ——> 在VC死亡之前 使用 [_subject sendCompleted]; ——>使订阅block释放！！
     [_subject subscribeNext:^(id x) {
         // block调用时刻：当信号发出新值，就会调用.
         NSLog(@"第二个订阅者%@",x);
@@ -612,7 +615,7 @@
     
 }
 
-///把两个信号组合成一个信号,跟zip一样，没什么区别
+///combineLatest 把两个信号组合成一个信号,跟zip一样，没什么区别
 - (void)combineSignal{
     
     //将多个信号合并起来，并且拿到各个信号的最新的值,必须每个合并的signal至少都有过一次sendNext，才会触发合并的信号。
@@ -647,11 +650,124 @@
         NSLog(@"%@",x);
     }];
     
+    // 绑定登录按钮
+    /**
+    RAC(self.loginBtn,enabled) = [RACSignal combineLatest:@[RACObserve(self.account, account),RACObserve(self.account, pwd)] reduce:^id(NSString *account,NSString *pwd){
+        
+        return @(account.length && pwd.length);
+        
+    }];
+     */
+    
     // 底层实现：
     // 1.当组合信号被订阅，内部会自动订阅signalA，signalB,必须两个信号都发出内容，才会被触发。
     // 2.并且把两个信号组合成元组发出。
     
 }
+
+///bind绑定数据 第二种方法
+- (void)bing_flattenMap{
+    
+    // 监听文本框的内容改变，把结构重新映射成一个新值.
+    
+    // flattenMap作用:把源信号的内容映射成一个新的信号，信号可以是任意类型。
+    
+    // flattenMap使用步骤:
+    // 1.传入一个block，block类型是返回值RACStream，参数value
+    // 2.参数value就是源信号的内容，拿到源信号的内容做处理
+    // 3.包装成RACReturnSignal信号，返回出去。
+    
+    // flattenMap底层实现:
+    // 0.flattenMap内部调用bind方法实现的,flattenMap中block的返回值，会作为bind中bindBlock的返回值。
+    // 1.当订阅绑定信号，就会生成bindBlock。
+    // 2.当源信号发送内容，就会调用bindBlock(value, *stop)
+    // 3.调用bindBlock，内部就会调用flattenMap的block，flattenMap的block作用：就是把处理好的数据包装成信号。
+    // 4.返回的信号最终会作为bindBlock中的返回信号，当做bindBlock的返回信号。
+    // 5.订阅bindBlock的返回信号，就会拿到绑定信号的订阅者，把处理完成的信号内容发送出来。
+    
+    
+    [[_textField.rac_textSignal flattenMap:^__kindof RACSignal * _Nullable(NSString * _Nullable value) {
+        // block什么时候 : 源信号发出的时候，就会调用这个block。
+        
+        // block作用 : 改变源信号的内容。
+        
+        // 返回值：绑定信号的内容.
+        return [RACSignal return:[NSString stringWithFormat:@"当前输出为：%@",value]];
+    }] subscribeNext:^(id  _Nullable x) {
+        
+        // 订阅绑定信号，每当源信号发送内容，做完处理，就会调用这个block。
+        
+        NSLog(@"%@",x);//传进来的是一个新的value
+    }];
+    
+    /** 信号 发送 信号
+     // 创建信号中的信号
+     RACSubject *signalOfsignals = [RACSubject subject];
+     RACSubject *signal = [RACSubject subject];
+     
+     [[signalOfsignals flattenMap:^RACStream *(id value) {
+     
+     // 当signalOfsignals的signals发出信号才会调用
+     
+     return value;
+     
+     }] subscribeNext:^(id x) {
+     
+     // 只有signalOfsignals的signal发出信号才会调用，因为内部订阅了bindBlock中返回的信号，也就是flattenMap返回的信号。
+     // 也就是flattenMap返回的信号发出内容，才会调用。
+     
+     NSLog(@"%@aaa",x);
+     }];
+     
+     // 信号的信号发送信号
+     [signalOfsignals sendNext:signal];
+     
+     // 信号发送内容
+     [signal sendNext:@1];
+     */
+}
+
+/**
+ FlatternMap和Map的区别
+ 
+ 1.FlatternMap中的Block返回信号。
+ 2.Map中的Block返回对象。
+ 3.开发中，如果信号发出的值不是信号，映射一般使用Map
+ 4.开发中，如果信号发出的值是信号，映射一般使用FlatternMap。
+ */
+
+///bind绑定数据第三种方法
+- (void)bing_map{
+    
+    // 监听文本框的内容改变，把结构重新映射成一个新值.
+    
+    // Map作用:把源信号的值映射成一个新的值
+    
+    // Map使用步骤:
+    // 1.传入一个block,类型是返回对象，参数是value
+    // 2.value就是源信号的内容，直接拿到源信号的内容做处理
+    // 3.把处理好的内容，直接返回就好了，不用包装成信号，返回的值，就是映射的值。
+    
+    // Map底层实现:
+    // 0.Map底层其实是调用flatternMap,Map中block中的返回的值会作为flatternMap中block中的值。
+    // 1.当订阅绑定信号，就会生成bindBlock。
+    // 3.当源信号发送内容，就会调用bindBlock(value, *stop)
+    // 4.调用bindBlock，内部就会调用flattenMap的block
+    // 5.flattenMap的block内部会调用Map中的block，把Map中的block返回的内容包装成返回的信号。
+    // 5.返回的信号最终会作为bindBlock中的返回信号，当做bindBlock的返回信号。
+    // 6.订阅bindBlock的返回信号，就会拿到绑定信号的订阅者，把处理完成的信号内容发送出来。
+    
+    [[_textField.rac_textSignal map:^id(id value) {
+        // 当源信号发出，就会调用这个block，修改源信号的内容
+        // 返回值：就是处理完源信号的内容。
+        return [NSString stringWithFormat:@"输出:%@",value];//返回的是一个value，不是信号
+    }] subscribeNext:^(id x) {
+        
+        NSLog(@"%@",x);
+    }];
+    
+}
+
 
 
 @end

@@ -19,6 +19,7 @@
 		1409536D2319348800F05759 /* ESRacSubject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1409536B2319348800F05759 /* ESRacSubject.m */; };
 		14095370231936F900F05759 /* RACSequenceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1409536F231936F900F05759 /* RACSequenceVC.m */; };
 		140953732319451000F05759 /* RACCommandVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 140953722319451000F05759 /* RACCommandVC.m */; };
+		14E9DF2F2329088B001C195A /* RAC基础常用方法查询.webarchive in Resources */ = {isa = PBXBuildFile; fileRef = 14E9DF2E2329088B001C195A /* RAC基础常用方法查询.webarchive */; };
 		552B8EC07521AFE4EEAE0C3C /* libPods-RACDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B8C57ED0998A8DBD94955F /* libPods-RACDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,7 @@
 		1409536F231936F900F05759 /* RACSequenceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RACSequenceVC.m; sourceTree = "<group>"; };
 		140953712319451000F05759 /* RACCommandVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RACCommandVC.h; sourceTree = "<group>"; };
 		140953722319451000F05759 /* RACCommandVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RACCommandVC.m; sourceTree = "<group>"; };
+		14E9DF2E2329088B001C195A /* RAC基础常用方法查询.webarchive */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "RAC基础常用方法查询.webarchive"; sourceTree = "<group>"; };
 		A6D5F4B2EC41C106541846AD /* Pods-RACDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACDemo.debug.xcconfig"; path = "Target Support Files/Pods-RACDemo/Pods-RACDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		D7B8C57ED0998A8DBD94955F /* libPods-RACDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RACDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F036EAC3880C08B977600FBD /* Pods-RACDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACDemo.release.xcconfig"; path = "Target Support Files/Pods-RACDemo/Pods-RACDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				1409535E2318CB3A00F05759 /* RACBaseViewController.m */,
 				140953482318C39100F05759 /* ViewController.h */,
 				140953492318C39100F05759 /* ViewController.m */,
+				14E9DF2E2329088B001C195A /* RAC基础常用方法查询.webarchive */,
 				140953642319007000F05759 /* BaseSignal */,
 				1409534B2318C39100F05759 /* Main.storyboard */,
 				1409534E2318C39300F05759 /* Assets.xcassets */,
@@ -197,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				140953522318C39300F05759 /* LaunchScreen.storyboard in Resources */,
+				14E9DF2F2329088B001C195A /* RAC基础常用方法查询.webarchive in Resources */,
 				1409534F2318C39300F05759 /* Assets.xcassets in Resources */,
 				1409534D2318C39100F05759 /* Main.storyboard in Resources */,
 			);
